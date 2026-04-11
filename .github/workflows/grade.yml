@@ -67,7 +67,6 @@ jobs:
           else:
               leaderboard = []
 
-          # Update or add entry
           existing = next((e for e in leaderboard if e["group"] == new_result["group"]), None)
           if existing:
               if new_result["accuracy"] > existing["accuracy"]:
@@ -86,6 +85,6 @@ jobs:
           print("Leaderboard updated!")
           EOF
 
-          git add leaderboard/leaderboard.json
+          git add docs/leaderboard.json
           git diff --staged --quiet || git commit -m "Update leaderboard after PR #${{ github.event.pull_request.number }}"
           git push origin main
