@@ -31,11 +31,11 @@ A basic starter script is available in `starter_code/starter_code.py`.
 ### Step 3 — Save your predictions
 Your submission file must follow these rules:
 
-✅ Save it inside the `submission/` folder
-✅ Name it exactly: `groupN_submission.csv` (e.g. `group1_submission.csv`)
-✅ Must have exactly one column named `prediction`
-✅ Values must be `0` or `1` only
-✅ Must have exactly **61 rows** (one per row in test.csv)
+1. Save it inside the `submission/` folder.
+2. Name it exactly: `groupN_submission.csv` (e.g. `group1_submission.csv`).
+3. Must have exactly one column named `prediction`.
+4. Values must be `0` or `1` only.
+5.Must have exactly **61 rows** (one per row in test.csv).
 
 Your file should look like this:
 prediction
