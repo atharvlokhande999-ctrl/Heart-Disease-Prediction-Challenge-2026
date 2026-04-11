@@ -4,6 +4,7 @@ import os
 import glob
 import json
 from datetime import datetime
+from sklearn.metrics import f1_score
 
 def find_submission():
     patterns = [
@@ -35,30 +36,35 @@ def grade(submission_path, labels_path):
         print(f"❌ Row count mismatch: got {len(submission)}, expected {len(labels)}")
         sys.exit(1)
 
-    correct  = (submission["prediction"].values == labels["target"].values).sum()
-    total    = len(labels)
-    accuracy = round(correct / total * 100, 2)
+    y_true = labels["target"].values
+    y_pred = submission["prediction"].values
 
-    print(f"✅ Accuracy: {accuracy:.2f}%  ({correct}/{total} correct)")
+    f1      = round(f1_score(y_true, y_pred), 4)
+    correct = (y_pred == y_true).sum()
+    total   = len(y_true)
+    acc     = round(correct / total * 100, 2)
 
-    # Save result to file for leaderboard
+    print(f"✅ F1 Score:  {f1}")
+    print(f"✅ Accuracy:  {acc}%  ({correct}/{total} correct)")
+
     group_name = os.environ.get("GROUP_NAME", "unknown")
     pr_number  = os.environ.get("PR_NUMBER", "0")
 
     result = {
-        "group": group_name,
-        "accuracy": accuracy,
-        "correct": int(correct),
-        "total": int(total),
-        "pr": pr_number,
-        "date": datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+        "group":    group_name,
+        "f1_score": f1,
+        "accuracy": acc,
+        "correct":  int(correct),
+        "total":    int(total),
+        "pr":       pr_number,
+        "date":     datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
     }
 
     os.makedirs("leaderboard_data", exist_ok=True)
-    with open(f"leaderboard_data/result.json", "w") as f:
+    with open("leaderboard_data/result.json", "w") as f:
         json.dump(result, f)
 
-    print(f"📊 Result saved for leaderboard")
+    print(f"📊 Result saved!")
 
 if __name__ == "__main__":
     submission_path = find_submission()
