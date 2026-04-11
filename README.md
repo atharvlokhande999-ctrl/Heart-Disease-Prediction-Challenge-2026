@@ -50,6 +50,11 @@ prediction
 3. Click **"Pull requests"** → **"New pull request"**
 4. Click **"compare across forks"**
 5. Set dropdowns like this:
+## ⚠️ Before You Submit
+After creating your repo from the template, **edit your README.md first** and add your group name and members:
+Group: group1
+Members: John, Jane, Bob
+Commit this change before opening a Pull Request — otherwise the PR will not work.
 
 6. Click **"Create pull request"**
 7. Wait for the bot to post your score as a comment!
