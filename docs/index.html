@@ -20,19 +20,28 @@
     .bar-wrap { display: flex; align-items: center; gap: 8px; }
     .bar-bg { flex: 1; height: 8px; background: #eaeef2; border-radius: 4px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 4px; background: #1a7f37; }
-    .rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; font-size: 12px; font-weight: 600; }
     .empty { text-align: center; padding: 3rem; color: #57606a; }
     .updated { font-size: 12px; color: #57606a; margin-top: 1rem; text-align: right; }
+    .medal { font-size: 18px; }
   </style>
 </head>
 <body>
   <h1>🏆 Heart Disease Prediction Challenge 2026</h1>
-  <p class="subtitle">Leaderboard — auto-updated on every submission</p>
+  <p class="subtitle">Leaderboard — ranked by F1 Score — auto-updated on every submission</p>
 
   <div class="stats">
-    <div class="stat"><div class="stat-label">Teams submitted</div><div class="stat-value" id="stat-teams">0</div></div>
-    <div class="stat"><div class="stat-label">Best accuracy</div><div class="stat-value" id="stat-best">—</div></div>
-    <div class="stat"><div class="stat-label">Average accuracy</div><div class="stat-value" id="stat-avg">—</div></div>
+    <div class="stat">
+      <div class="stat-label">Teams submitted</div>
+      <div class="stat-value" id="stat-teams">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Best F1 Score</div>
+      <div class="stat-value" id="stat-best">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Average F1 Score</div>
+      <div class="stat-value" id="stat-avg">—</div>
+    </div>
   </div>
 
   <table>
@@ -40,43 +49,48 @@
       <tr>
         <th>Rank</th>
         <th>Group</th>
+        <th>F1 Score</th>
         <th>Accuracy</th>
         <th>Submitted</th>
         <th>PR</th>
       </tr>
     </thead>
     <tbody id="lb-body">
-      <tr><td colspan="5" class="empty">No submissions yet</td></tr>
+      <tr><td colspan="6" class="empty">No submissions yet</td></tr>
     </tbody>
   </table>
   <p class="updated" id="updated"></p>
 
   <script>
-    fetch('leaderboard.json')
+    const medals = ['🥇', '🥈', '🥉'];
+
+    fetch('leaderboard.json?v=' + Date.now())
       .then(r => r.json())
       .then(data => {
-        const sorted = data.sort((a, b) => b.accuracy - a.accuracy);
-        const medals = ['🥇', '🥈', '🥉'];
+        const sorted = data.sort((a, b) => b.f1_score - a.f1_score);
 
         if (sorted.length === 0) return;
 
-        const best = sorted[0].accuracy;
-        const avg  = (sorted.reduce((s, e) => s + e.accuracy, 0) / sorted.length).toFixed(2);
+        const best = sorted[0].f1_score;
+        const avg  = (sorted.reduce((s, e) => s + e.f1_score, 0) / sorted.length).toFixed(4);
 
         document.getElementById('stat-teams').textContent = sorted.length;
-        document.getElementById('stat-best').textContent  = best + '%';
-        document.getElementById('stat-avg').textContent   = avg + '%';
+        document.getElementById('stat-best').textContent  = best;
+        document.getElementById('stat-avg').textContent   = avg;
 
         document.getElementById('lb-body').innerHTML = sorted.map((e, i) => `
           <tr>
-            <td><span class="rank-badge">${medals[i] || i + 1}</span></td>
+            <td><span class="medal">${medals[i] || i + 1}</span></td>
             <td><strong>${e.group}</strong></td>
             <td>
               <div class="bar-wrap">
-                <div class="bar-bg"><div class="bar-fill" style="width:${e.accuracy}%"></div></div>
-                <span>${e.accuracy}%</span>
+                <div class="bar-bg">
+                  <div class="bar-fill" style="width:${e.f1_score * 100}%"></div>
+                </div>
+                <span><strong>${e.f1_score}</strong></span>
               </div>
             </td>
+            <td>${e.accuracy}%</td>
             <td>${e.date}</td>
             <td><a href="../pull/${e.pr}">#${e.pr}</a></td>
           </tr>
