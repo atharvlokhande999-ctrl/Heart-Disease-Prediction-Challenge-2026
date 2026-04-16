@@ -25,5 +25,14 @@
     "total": 61,
     "pr": "11",
     "date": "2026-04-13 14:10 UTC"
+  },
+  {
+    "group": "bhalgatjinesh05-creator",
+    "f1_score": 0.5846,
+    "accuracy": 55.74,
+    "correct": 34,
+    "total": 61,
+    "pr": "13",
+    "date": "2026-04-16 07:22 UTC"
   }
 ]
