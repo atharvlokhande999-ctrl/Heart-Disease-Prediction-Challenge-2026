@@ -23,8 +23,8 @@ from sklearn.metrics import classification_report, f1_score, accuracy_score
 
 import joblib
 
-# ----------------------------
-# 1. Load Data (IMPORTANT FIX)
+
+# 1. Load Data 
 # ----------------------------
 df = pd.read_csv("train .csv")   # your actual filename
 
@@ -42,7 +42,7 @@ X_train, X_val, y_train, y_val = train_test_split(
 )
 
 # ----------------------------
-# 4. Pipeline (BEST PRACTICE)
+# 4. Pipeline 
 # ----------------------------
 pipeline = Pipeline([
     ("imputer", SimpleImputer(strategy="median")),
